@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import Coins from "./components/Coins";
 import Navbar from "./components/Navbar";
-import { Routes, Route } from "react-router-dom";
-import Coin from './routes/Coin'
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Coin from './components/Coin'
+import LoginUi from "./components/LoginUi";
+import { Provider } from "react-redux";
+import { createStore } from 'redux'
+import reducer from './store/reducer'
+
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 
 function App() {
@@ -23,14 +29,18 @@ function App() {
 
   return (
     <>
+      <Provider store={store}>
+      <BrowserRouter>
       <Navbar />
       <Routes>
         <Route path='/' element={<Coins coins={coins} />} />
+        <Route path= '/login' element={<LoginUi />} />
         <Route path='/coin' element={<Coin />}>
           <Route path=':coinId' element={<Coin />} />
         </Route>
       </Routes>
-
+      </BrowserRouter>
+      </Provider>
     </>
   );
 }

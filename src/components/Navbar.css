@@ -12,3 +12,13 @@ icon {
 .purple {
     color: #6900ff;
 }
+
+.Btn {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.BtnR {
+    background-color: #6900ff;
+    background: #6900ff;
+}

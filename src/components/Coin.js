@@ -2,10 +2,11 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import DOMPurify from 'dompurify'
+import { connect } from 'react-redux'
 
 import './Coin.css'
 
-const Coin = () => {
+const Coin = (props) => {
 
     const params = useParams()
     const [coin, setCoin] = useState({})
@@ -19,11 +20,16 @@ const Coin = () => {
         })
     }, [])
 
+const handleAdd = (Obj) => {
+    props.addToWatchList(Obj)
+}
+
     return (
         <div>
             <div className='coin-container'>
                 <div className='content'>
                     <h1>{coin.name}</h1>
+                    <button onClick={(Obj)=> handleAdd(coin)} className='btnB'>Add To Watch List</button>
                 </div>
                 <div className='content'>
                     <div className='rank'>
@@ -110,4 +116,9 @@ const Coin = () => {
     )
 }
 
-export default Coin
+const mapDispatchToProps = (dispatch) => {
+    return{
+    addToWatchList: (Obj) => dispatch({type: 'ADD_TO_WATCHLIST', payload: Obj})
+    }}
+
+export default connect(null, mapDispatchToProps)(Coin)

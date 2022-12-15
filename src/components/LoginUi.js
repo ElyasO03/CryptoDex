@@ -1,6 +1,7 @@
-import {useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {connect } from 'react-redux'
+import { connect } from 'react-redux'
+import '../components/LoginUi.css'
 
 function LoginUi(props) {
     const [user, setUser] = useState({})
@@ -14,44 +15,68 @@ function LoginUi(props) {
     }
 
     const handleSubmit = () => {
-        
-        fetch('http://localhost:8080/cryptodex/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-        .then(response => response.json())
-        .then(result => {
+        if (!user.username || !user.password) {
+            alert('Please fill out all textboxes.')
+        } else {
+            fetch('http://localhost:8080/cryptodex/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+                .then(response => response.json())
+                .then(result => {
 
-            if(result.success) {
-                const token = result.token
-                const username = result.name
-                localStorage.setItem('jwt', token)
-                localStorage.setItem('username', username)
+                    if (result.success) {
+                        const token = result.token
+                        const username = result.name
+                        localStorage.setItem('jwt', token)
+                        localStorage.setItem('username', username)
 
-                props.onLogin(token)
+                        props.onLogin(token)
 
-                navigate('/')
-            }
-            console.log(result)
-        })
+                        navigate('/')
+                    } else {
+                        alert('the user name or password is incorrect. try again')
+                    }
+                    console.log(result)
+
+                })
+        }
     }
 
-return(
-    <>
-    <input onChange = {handleOnChange} name= "username" type= "text" placeholder="Enter Username" />
-    <input onChange = {handleOnChange} name= "password" type= "text" placeholder="Enter Password" />
-    <button onClick={handleSubmit}>Login</button>
-    </>
-)
+    return (
+        <>
+            <div className='body'>
+                <div className='box'>
+                    <div className='form'>
+                        <h2>Login</h2>
+                        <div className='inputBox'>
+                            <input minLength={4} maxLength={16} onChange={handleOnChange} name="username" type="text" required="required" />
+                            <span>Username</span>
+                            <i></i>
+                        </div>
+                        <div className='inputBox'>
+                            <input minLength={4} maxLength={16} onChange={handleOnChange} name="password" type="password" required="required" />
+                            <span>Password</span>
+                            <i></i>
+                        </div>
+                        <div className='links'>
+                            <a href='/register'>Sign Up</a>
+                        </div>
+                        <button onClick={handleSubmit}>Login</button>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogin: (token) => dispatch({type: 'ON_LOGIN', payload: token})
+        onLogin: (token) => dispatch({ type: 'ON_LOGIN', payload: token })
     }
 }
 

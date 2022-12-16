@@ -6,7 +6,7 @@
 * Features on the App:
 
 ## Preview Example
-![](images/cryptoDex.png)
+![](/cryptodex/src/images/image.png)
 
 ## Languages and Tools:
 * CSS, React, Redux, JavaScript, Node.js, Sequelize, Postgresql, Postman, MUI
